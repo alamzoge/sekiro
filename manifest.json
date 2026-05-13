@@ -1,17 +1,24 @@
 {
   "name": "SEKIRO CHAT",
   "short_name": "SEKIRO",
-  "start_url": "./index.html",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#111111",
   "theme_color": "#d4af37",
-  "orientation": "portrait",
+  "dir": "rtl",
+  "lang": "ar",
   "icons": [
     {
       "src": "12345.jpg",
       "sizes": "512x512",
       "type": "image/jpeg",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "12345.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "maskable"
     }
   ]
 }
