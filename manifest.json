@@ -1,4 +1,5 @@
 {
+  "id": "com.abdulrahman.sekiro",
   "name": "SEKIRO CHAT",
   "short_name": "SEKIRO",
   "description": "تطبيق دردشة متطور وسريع",
@@ -8,6 +9,7 @@
   "theme_color": "#d4af37",
   "dir": "rtl",
   "lang": "ar",
+  "orientation": "portrait",
   "icons": [
     {
       "src": "12345.jpg",
@@ -20,6 +22,29 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "محادثة جديدة",
+      "short_name": "دردشة",
+      "description": "ابدأ محادثة جديدة فوراً",
+      "url": "/",
+      "icons": [
+        {
+          "src": "12345.jpg",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    }
+  ],
+  "widgets": [
+    {
+      "name": "SEKIRO Status",
+      "description": "عرض أحدث الحالات من أصدقائك",
+      "tag": "sekiro-widget",
+      "ms_ac_hns": "widget.html"
     }
   ]
 }
