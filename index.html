@@ -476,7 +476,6 @@
         let selectedMsgId = null; let selectedMsgSender = null; let selectedMsgText = "";
         let replyingToId = null; let replyingToText = ""; let editingMsgId = null;
 
-        // متغيرات التسجيل الصوتي
         let mediaRecorder; let audioChunks = []; let isRecording = false; let isAudioReady = false; let recordingInterval; let recordingSeconds = 0;
         let globalAudioStream = null;
 
@@ -529,17 +528,15 @@
         async function toggleRecording() {
             if (!activeChatId) return;
             if (isRecording || isAudioReady) { 
-                // إلغاء التسجيل وحذفه 
                 if(mediaRecorder && mediaRecorder.state !== 'inactive') {
                     mediaRecorder.onstop = null;
                     mediaRecorder.stop();
                 }
                 resetRecordingUI();
             } else { 
-                // بدء التسجيل
                 const stream = await initAudioStream();
                 if(!stream) return;
-                mediaRecorder = new MediaRecorder(stream, { audioBitsPerSecond: 64000 }); // جودة عالية
+                mediaRecorder = new MediaRecorder(stream, { audioBitsPerSecond: 64000 });
                 audioChunks = [];
                 mediaRecorder.ondataavailable = e => { if (e.data.size > 0) audioChunks.push(e.data); };
                 
@@ -561,7 +558,7 @@
                     
                     document.getElementById('recording-timer').innerText = `${displayM}:${displayS}`;
                     
-                    if (recordingSeconds >= 300) {  // 5 دقائق (300 ثانية)
+                    if (recordingSeconds >= 300) { 
                         clearInterval(recordingInterval);
                         mediaRecorder.onstop = null;
                         mediaRecorder.stop();
@@ -642,6 +639,7 @@
             document.getElementById('sidebar-my-avatar').src = currentUser.avatar || "12345.jpg";
         }
 
+        // تم تصحيح هذه الدالة لحل المشكلة بالكامل
         function startDatabaseListeners() {
             db.ref('users').on('value', snap => {
                 allUsersData = snap.val() || {};
@@ -653,12 +651,19 @@
                     currentUser.status = allUsersData[currentUser.id].status || null;
                     updateSidebarUserUI();
                 }
-                renderAppContent(); if(activeChatId) openChat(activeChatId, true); 
+                renderAppContent(); if(activeChatId && !allChatsData[activeChatId]) openChat(activeChatId, true); 
             });
 
             db.ref('chats').on('value', snap => {
                 allChatsData = snap.val() || {};
                 
+                renderChatList();
+
+                // التحديث التلقائي الفوري للرسائل أثناء فتح المحادثة
+                if (activeChatId && allChatsData[activeChatId]) {
+                    renderMessages(); 
+                }
+
                 Object.keys(allChatsData).forEach(chatId => {
                     const chat = allChatsData[chatId];
                     if (chat.members && chat.members[currentUser.id] && chat.messages) {
@@ -675,8 +680,6 @@
                         lastKnownMessages[chatId] = lastMsgKey;
                     }
                 });
-
-                renderAppContent(); if (activeChatId) openChat(activeChatId, true); 
             });
         }
 
@@ -827,7 +830,6 @@
                 return true;
             });
 
-            // الترتيب حسب الوقت
             myChats.sort((a, b) => {
                 let timeA = 0; let timeB = 0;
                 if (allChatsData[a].messages) {
@@ -979,13 +981,11 @@
                 });
             }
             
-            // مؤقت ذكي لضمان النزول لأسفل الشات بعد تحميل الصور والأصوات
             setTimeout(() => { container.scrollTop = container.scrollHeight; }, 150);
             setTimeout(() => { container.scrollTop = container.scrollHeight; }, 500);
         }
 
         function sendMessage() {
-            // إرسال الصوت عبر زر الإرسال الرئيسي
             if (isRecording || isAudioReady) {
                 if (mediaRecorder && mediaRecorder.state !== 'inactive') {
                     mediaRecorder.onstop = () => { processAndSendAudio(); };
@@ -1191,7 +1191,6 @@
             window.addEventListener('load', function() {
                 navigator.serviceWorker.register('sw.js').then(function(registration) {
                     console.log('ServiceWorker + SyncManager registered');
-                    // تسجيل المزامنة في الخلفية
                     registration.sync.register('sync-messages').catch(function(err) {
                         console.log('Sync registration failed:', err);
                     });
@@ -1200,7 +1199,6 @@
                 });
             });
         } else if ('serviceWorker' in navigator) {
-            // دعم للمتصفحات التي تدعم ServiceWorker فقط بدون SyncManager
             window.addEventListener('load', function() {
                 navigator.serviceWorker.register('sw.js').catch(function(err) {
                     console.log('SW Error: ', err);
