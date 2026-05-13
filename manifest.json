@@ -12,13 +12,13 @@
   "orientation": "portrait",
   "icons": [
     {
-      "src": "12345.jpg",
+      "src": "icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "12345.jpg",
+      "src": "icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
@@ -32,19 +32,11 @@
       "url": "/",
       "icons": [
         {
-          "src": "12345.jpg",
+          "src": "icon-192.png",
           "sizes": "192x192",
           "type": "image/png"
         }
       ]
-    }
-  ],
-  "widgets": [
-    {
-      "name": "SEKIRO Status",
-      "description": "عرض أحدث الحالات من أصدقائك",
-      "tag": "sekiro-widget",
-      "ms_ac_hns": "widget.html"
     }
   ]
 }
