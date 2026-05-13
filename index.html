@@ -111,7 +111,7 @@
         .back-btn { display: none; background: none; border: none; color: #fff; font-size: 24px; padding: 5px; cursor: pointer; }
         body[dir="ltr"] .back-btn i { transform: rotate(180deg); }
         
-        .messages-container { flex-grow: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+        .messages-container { flex-grow: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; scroll-behavior: smooth; }
         .message { max-width: 85%; padding: 10px 15px; border-radius: 18px; position: relative; font-size: 15px; line-height: 1.5; word-wrap: break-word; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 12px; cursor: pointer; transition: 0.2s; }
         .message:active { transform: scale(0.98); }
         .msg-received { background: var(--msg-received); align-self: flex-start; border-top-right-radius: 4px; backdrop-filter: blur(10px); }
@@ -380,9 +380,13 @@
         <div class="glass-panel modal-content">
             <button class="close-modal" onclick="closeModal('modal-profile')"><i class="fa-solid fa-xmark"></i></button>
             
+            <!-- زر الخروج تمت إضافته هنا بوضوح -->
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:1px solid var(--glass-border); padding-bottom:15px;">
                 <h2 style="margin:0;" data-i18n="my_profile">ملفي الشخصي</h2>
-                <button class="btn-primary btn-outline" style="width:auto; padding: 5px 15px; font-size:14px;" onclick="toggleLanguage()"><i class="fa-solid fa-language"></i> EN/AR</button>
+                <div style="display:flex; gap:10px;">
+                    <button class="btn-primary btn-outline" style="width:auto; padding: 5px 15px; font-size:14px;" onclick="toggleLanguage()"><i class="fa-solid fa-language"></i> EN/AR</button>
+                    <button class="btn-primary btn-danger" style="width:auto; padding: 5px 15px; font-size:14px;" onclick="logout()" title="تسجيل الخروج"><i class="fa-solid fa-arrow-right-from-bracket"></i></button>
+                </div>
             </div>
 
             <div style="position: relative; width: 100px; height: 100px; margin: 0 auto 20px;">
@@ -978,10 +982,14 @@
                     `;
                 });
             }
-            container.scrollTop = container.scrollHeight;
+            
+            // مؤقت ذكي لضمان النزول لأسفل الشات بعد تحميل الصور والأصوات
+            setTimeout(() => { container.scrollTop = container.scrollHeight; }, 150);
+            setTimeout(() => { container.scrollTop = container.scrollHeight; }, 500);
         }
 
         function sendMessage() {
+            // إرسال الصوت عبر زر الإرسال الرئيسي
             if (isRecording || isAudioReady) {
                 if (mediaRecorder && mediaRecorder.state !== 'inactive') {
                     mediaRecorder.onstop = () => { processAndSendAudio(); };
